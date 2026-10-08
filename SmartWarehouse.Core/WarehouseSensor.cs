@@ -24,24 +24,22 @@ public class WarehouseSensor
     public bool IsAlertTriggered{ get; private set; } = false;
     public double CriticalThresholdCelsius { get; private set; } = 4.0;
 
-    public WarehouseSensor(string sensorId, string locationTage, double criticalThreshold = 4.0)
+    public WarehouseSensor(string sensorId, string locationTag, double criticalThreshold = 4.0)
+{
+    if (string.IsNullOrWhiteSpace(sensorId))
     {
-        if (string.IsNullOrWhiteSpace(sensorId))
-        {
-            throw new ArgumentException("SensorId cannot be null, empty, or whitespace.", nameof(sensorId));
-        }
-
-        SensorId = sensorId;
-        LocationTag = _locationTag; // Calls LocationTag setter validation
-
-        // Validate threshold range on initialization
-        if (criticalThreshold < -30.0 || criticalThreshold > 50.0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(criticalThreshold), "Threshold must be between -30.0°C and 50.0°C.");
-        }
-        
-        CriticalThresholdCelsius = criticalThreshold;
+        throw new ArgumentException("SensorId cannot be null, empty, or whitespace.", nameof(sensorId));
     }
+
+    if (criticalThreshold < -30.0 || criticalThreshold > 50.0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(criticalThreshold), "Threshold must be between -30.0°C and 50.0°C.");
+    }
+
+    SensorId = sensorId;
+    LocationTag = locationTag;
+    CriticalThresholdCelsius = criticalThreshold;
+}
 
     public void Activate()
     {
